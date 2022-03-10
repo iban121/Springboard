@@ -1,0 +1,24 @@
+Model,Scaled,Parameters,Features Removed,MCC,Precision for M,F1-Score for M,AOC,Important Features > 1%
+KNN,Standardised,"Leaf size = 1, n_neighbors = 3, p = 2",N/A,0.97,0.98,0.99,0.999,N/A
+KNN,Standardised,n_neighbors = 1,N/A,0.97,0.99,0.99,0.985,N/A
+KNN,Standardised,n_neighbors = 4,N/A,0.985,1,0.99,0.5,N/A
+Random Forest Classifier,No,"n_estimators = 23, max_depth=4",N/A,0.94,0.98,0.98,0.997,"area_worst, concave points worst, concave points mean"
+Random Forest Classifier,No,"n_estimators = 23, max_depth=4","(['perimeter_worst', 'area_se', 'perimeter_mean', 'radius_se']",0.955,0.98,0.98,0.998,N/A
+Random Forest Classifier,No,"max_depth': 6, 'max_features': 0.9285492302174145, 'max_samples': 0.6407877015096328, 'n_estimators': 165",N/A,0.94,0.98,0.98,0.997,"Perimeter worst, concave points worst, radius worst, area worst"
+Logistic  Regression,Standardised,"C = 0.1, Penalty = l2, solver = liblinear",N/A,0.955,0.99,0.98,0.999,N/A
+KNN,Standardised,n_neighbors = 2,N/A,0.955,0.99,0.98,0.5,N/A
+Random Forest Classifier,No,N/A,N/A,0.955,0.99,0.98,0.997,N/A
+Random Forest Classifier,No,"n_estimators = 23, max_depth=4","['perimeter_worst', 'area_se', 'perimeter_mean', 'area_mean', 'radius_se', 'radius_mean', 'smoothness_worst', 'fractal_dimension_se', 'symmetry_se', 'concavity_se', 'compactness_se', 'symmetry_worst', 'smoothness_se', 'texture_se', 'fractal_dimension_mean', 'compactness_mean']",0.955,0.99,0.98,0.998,N/A
+XGBoost,No,N/A,N/A,0.955,0.99,0.98,0.997,"Perimeter worst, radius worst, concave points worst, area mean, radius se, radius worst, perimeter mean, concavity se, concavity worst, concave points mean"
+Gradient Boosting Classifier,No,"learning_rate = 0.088, max_depth = 8, n_estimators = 471, subsample = 0.9533",-,0.956,1,0.98,0.949,"Perimeter worst, concave points worst, texture worst, area se, texture mean, area mean"
+Random Forest Classifier,No,"max_depth': 6, 'max_features': 0.9285492302174145, 'max_samples': 0.6407877015096328, 'n_estimators': 165","['concave points_mean','texture_worst', 'texture_mean','area_se', 'concavity_worst', 'area_mean', 'concavity_mean','smoothness_worst','radius_se', 'radius_mean', 'compactness_worst', 'fractal_dimension_se','symmetry_worst','symmetry_se', 'smoothness_se', 'smoothness_mean', 'compactness_se','perimeter_mean','fractal_dimension_worst','perimeter_se','texture_se','concave points_se', 'fractal_dimension_mean','concavity_se','symmetry_mean','compactness_mean']",0.909,0.96,0.97,0.991,"Perimeter worst, concave points worst, texture worst, area se, texture mean, area mean,"
+Logistic Regression,No,N/A,N/A,0.91,0.98,0.97,0.637,N/A
+Gradient Boosting Classifier,No,N/A,N/A,0.925,0.98,0.97,0.995,N/A
+XGBoost,No,"reg_lambda= 3, reg_alpha = 0.5, objective = 'reg:squarederror', n_estimators= 500, min_child_weight= 15, max_depth= 10, learning_rate = 0.1, gamma = 3,colsample_bytree= 0.8,",N/A,0.894,0.95,0.96,0.992,"Perimeter worst, radius worst, concave points worst, concave points mean, area se, texture worst"
+KNN,Standardised,n_neighbors = 8,N/A,0.849,0.95,0.95,0.5,N/A
+SVC,No,"C = 1, gamma = 0.0001, kernel = rbf",N/A,0.849,0.95,0.95,0.971,N/A
+KNN,Standardised,n_neighbors = 6,N/A,0.865,0.96,0.95,0.5,N/A
+SVC,No,N/A,N/A,0.833,0.92,0.94,0.969,N/A
+KNN,No,n_neighbors =1,N/A,0.834,0.94,0.94,0.919,N/A
+SVC,Standardised,N/A,N/A,0,0.64,0.78,0.999,N/A
+SVC,PowerTransformer,N/A,N/A,0,0.64,0.78,1,N/A
