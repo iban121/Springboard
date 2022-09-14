@@ -1,7 +1,9 @@
-# Classification of Tweets
+# Natural Language Processing: Classification of Tweets
 
-## Introduction
-Currently, my family spans across four countries and 3 continents. Whevever a tweet about natural disasters or accidents props up in our notification, I know I'm not alone in checking for detailed locations to see if my loved ones are safe. Many folks have fallen victims to false news, or sometimes just  So, for my capstone project I wanted to create a classification model which could distinguish between tweets about natural disasters and those that are not. Furthermore, as I am starting out in my data science career, I wanted to try out my recently acquired skills in natural language processing.  
+## Overview
+For my capstone project I decided to apply all that've learned about Natural Language Processing. I'm sure I'm not alone in saying that finding a question that is nuanced enough to give me the chance to show off my data science skills whilst being interesting and unique to me was the hardest part of the process. From Towards Data Science blogs to the many books out there, you'll find give such conflicting informaiton about whether you should pick a dataset from Kaggle or whether you should webscrape or get it from a companys' API directly to show off your skills, or even use data from your FitBit. So, I figured rather than having a project that does it all, I would rather apply NLP on something that I find interesting and relevant.
+
+Currently, my family spans across four countries and three continents. Whevever a tweet or news notification about disasters or accidents props up in our notification, I know I'm not alone in checking for detailed locations to see if my loved ones are safe. So, for my capstone project I wanted to create a classification model which could distinguish between tweets about natural disasters and those that are not. Furthermore, as I am starting out in my data science career, I wanted to try out my recently acquired skills in natural language processing.  
 
 ### Problem Identification
 Classification models for NLP is becoming more and more important as we've seen in social media sites implementing fact checkers during recent elections around the world and the COVID-19 pandemic to help the general public distinguish between real and conspirary information. For this project, a dataset of 7631 tweets in English from Kaggle was used with the goal of classifying the tweets into two groups: Tweets regarding disasters and those that are not related to disasters. 
@@ -70,6 +72,7 @@ Whilst an accuracy of 79% isn’t necessarily bad, and is definitely an improvem
 
 
 ### Deep Learning Model with Word Embedding 
+
 Google’s Word2Vec was used to create a deep learning model. This was selected to see if we could keep the semantic closeness of the words in the tweets- think about this as the order at which the words appear in the tweets. The size of the features were trialed with 100, 200, and 300, with 200 giving us the highest accuracy of 61% . 
 
 For the neural networks there were three layers, the first one with 512 neurons, and two subsequent ones with 256 neurons each. A final layer was added, the output layer, with 1 neuron. Whilst, theoretically there are many different activation functions that can be used, for the first three layers Rectified Linear Unit function was used. ReLU function is one of the most popular activation functions and was selected because it is so much more computationally efficient compared to the rest. For the final layer the sigmoid function was used for activation as this is a binary classification and we are looking for outputs of whether a tweet is a disaster or not.
