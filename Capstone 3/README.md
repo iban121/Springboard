@@ -1,36 +1,50 @@
-# Natural Language Processing: Classification of Tweets
+# Natural Language Processing: Binary Classification of Tweets
 
 ## Overview
-For my capstone project I decided to apply all that've learned about Natural Language Processing. I'm sure I'm not alone in saying that finding a question that is nuanced enough to give me the chance to show off my data science skills whilst being interesting and unique to me was the hardest part of the process. From Towards Data Science blogs to the many books out there, you'll find give such conflicting informaiton about whether you should pick a dataset from Kaggle or whether you should webscrape or get it from a companys' API directly to show off your skills, or even use data from your FitBit. So, I figured rather than having a project that does it all, I would rather apply NLP on something that I find interesting and relevant.
+For my capstone project I decided to apply all that've learned about Natural Language Processing. I'm sure I'm not alone in saying that finding a question that is nuanced enough to give me the chance to show off my data science skills whilst being interesting and unique to me was the hardest part of the process. From Towards Data Science blogs to the many books out there, ou'll find give such conflicting informaiton about whether you should pick a dataset from Kaggle or whether you should webscrape or get it from a companys' API directly to show off your skills, or even use data from your Fitbit. So, I figured rather than having a project that does it all, I would rather apply NLP on something that I find interesting and relevant. 
 
-Currently, my family spans across four countries and three continents. Whevever a tweet or news notification about disasters or accidents props up in our notification, I know I'm not alone in checking for detailed locations to see if my loved ones are safe. So, for my capstone project I wanted to create a classification model which could distinguish between tweets about natural disasters and those that are not. Furthermore, as I am starting out in my data science career, I wanted to try out my recently acquired skills in natural language processing.  
+### So, why classification of tweets? 
 
-### Problem Identification
-Classification models for NLP is becoming more and more important as we've seen in social media sites implementing fact checkers during recent elections around the world and the COVID-19 pandemic to help the general public distinguish between real and conspirary information. For this project, a dataset of 7631 tweets in English from Kaggle was used with the goal of classifying the tweets into two groups: Tweets regarding disasters and those that are not related to disasters. 
+Currently, my family lives in four countries across three continents. Whevever a notification about disasters or accidents props up, I know I'm not alone in checking for detailed information to see if my loved ones are safe. So, for my capstone project I wanted to create a classification model which could distinguish between tweets about natural disasters and those that are not. Furthermore, as I am starting out in my data science career, I wanted to try out my recently acquired skills in natural language processing. Classification models for NLP is becoming more and more important as we've seen in social media sites implementing fact checkers during recent elections around the world and the COVID-19 pandemic to help the general public distinguish between real and conspirary information.Maybe we could use the model to develop an app or even a chatbox where users can feed in their tweet of choice and the model can help determine if this is about a disaster or not. But, for now, we are going to limit the scope of this project to developing the classifcation models using machine learning and deep learning. 
+
+### Kaggle Disaster Tweets
+For this project, a dataset of 7631 tweets in English from Kaggle was used with the goal of classifying the tweets into two groups: Tweets regarding disasters and those that are not related to disasters. Definetely check out the dataset here: https://www.kaggle.com/competitions/nlp-getting-started/data.
 
 ## Data Wrangling and Exploratory Data Analysis 
 
 ### The Data 
-The dataset included 5 columns: id, keyword, location, texthttps://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/Distibution_of_data.png, and label (target) of 1 or 0. All 7631 entries had texts and their labels, however 33% of the location entries and 0.80% of the keyword entries were missing. The dataset was noted to be unbalanced with 4342 non-disaster tweets and 3271 disaster tweets. The bar chart on the right highlights the distribution of the data for the two different target classes. 
+The dataset included 5 columns: id, keyword, location, tweets, and label (target) of 1 or 0. All 7631 entries had texts and their labels, however 33% of the location entries and 0.80% of the keyword entries were missing. The dataset was noted to be unbalanced with 4342 non-disaster tweets and 3271 disaster tweets. The bar chart on the right highlights the distribution of the data for the two different target classes. Target class 1 refers to real disasters and 0 for non disaster tweets.
 
  
 ![Alt text](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/Distibution_of_data.png)
 
-The id numbers were not ordered so I decided to dropped this column pretty early on. Then, I focused on the keywords and the locations of the tweets to see if these could yield any divisive information on the two classes. 
+The id numbers were not ordered so I decided to dropped this column. Then, I focused on the keywords and the locations of the tweets to see if these could yield any divisive information on the two classes. As less than 1% of the keywords were missing, I was hoping this could provide some early insight into the two classes. I was also hoping the large chunk of entries missing for location could provide an insight as well: perhaps one class uses location tags more frequently than others? Or perhaps those with missing keywords had locations present?
 
 ### Keywords
-Of the 7631 entries in the dataset, only 7552 of them had keywords and only 221 of them were unique. 
+Of the 7631 entries in the dataset, only 7552 of them had keywords of which only 221 of them were unique. I wanted to explore these 221 keywords, and see if they could help distinguish between the two classes. 
 
-To start with, I had a quick look through the keywords. The first things I noticed was there were plenty of punctuation and accented letters in them, so this gave me an idea of how to start the cleaning process. I initially created a wordcloud and found a few common expressions such as '%20', hashtags, and '%' signs were the ones that popped up quite a bit. I used regular expressions alongside the unidecode library to first wrangle the keywords. Then, to gain an
+To start with, I had a quick look through the keywords. The first things I noticed was there were plenty of punctuation and accented letters in them, so this gave me an idea of how to start the cleaning process. I initially created a wordcloud and found a few common expressions such as '%20', hashtags, and '%' signs were the ones that popped up quite a bit. I used regular expressions alongside the unidecode library to first wrangle the keywords.
 
-A couple of words such as evacuate and evacuated and suicide bombing and suicide bomber appeared as independent words and phrases. Initially I was reluctant to stem the keywords as too much cleaning can sometimes run the risk of losing the sentiments of the texts. However, when I had a look through the keywords (have a look at the chart below) I realised the risks of that was quite low with this dataset. So, I used PorterStemmer to further cleanup the keywords.
+I, then, wanted to look at a countplot of the words. This was a little tricky. My goal was to see if I could group the keywords into the two classes, and then see how often they were used in the two classes. So, first I grouped the keywords by their target classes, and then I used the .transform() method to work out the mean count of the keywords in the respective classes.
 
 ![Distribution of Keywords before Stemming](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/keywords_distributions_before_stemming.png)
+
+What I found was a little disappointing but not surpising. Only a couple of words were exclusively used in one class over the other. Such as derailment, debris, and wreckage only seemed to appear in disaster tweets whilst aftershok only appeared in non-disaster tweets. 4 words is not really enough to form a model which is disappointing but not the end of the world. A little further digging did show us some interesting features of our countplot: derailment and derailed for example appears more than once. A couple of words such as 'evacuate' and 'evacuated' and 'suicide bombing' and 'suicide bomber' appeared as independent words and phrases. This suggested I need to consider stemming or lemmatization of the keywords before we any further analysis. 
+
+#### Picking between Stemming and Lemmatization
+> Stemming is when the last couple of letters are removed from a word in the hopes of getting to the root word. For example for 'derailed' and 'derailment' can both be reduced to 'derail'.
+> Lemmatization is when we break down the word into essentially the form we can find in a dictionary. This is more complex than stemming as lemmatization takes into account the contextual use of the words too. 
+
+To understanding the difference between the two processes check our this like: https://www.sinequa.com/guide/natural-language-processing-guide/
+
+Initially I was reluctant to stem the keywords as too much cleaning can sometimes run the risk of losing the sentiments of the texts. However, when I had a look through the keywords (have a look at the chart below) I realised the risks of that was quite low with this dataset. So, I used PorterStemmer to further clean up the keywords.
+
+
 
 If we take a look at the chart above with the one below, we can see that words like evacuated has been reduced to their stems 'evacu'.
 ![Distribution of Keywords After Stemming](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/keywords_distributions.png)
 
-It is worth noting that even after the cleaning and stemming, we aren't close to having the perfectly clean dataset. For exmaple, wild fir and wildfir are both referring to wildfires, and bleed and blood could benefit from combining as well. However, at this point I decided we had enough 
+It is worth noting that even after the cleaning and stemming, we aren't close to having the perfectly clean dataset. For exmaple, wild fir and wildfir are both referring to wildfires, and bleed and blood could benefit from combining as well. 
 
 The two word clouds illustrate the most common keywords in the two different classes. 
 
