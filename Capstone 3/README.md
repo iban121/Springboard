@@ -5,7 +5,7 @@ For my capstone project I decided to apply all that've learned about Natural Lan
 
 ### So, why classification of tweets? 
 
-Currently, my family lives in four countries across three continents. Whevever a notification about disasters or accidents props up, I know I'm not alone in checking for detailed information to see if my loved ones are safe. So, for my capstone project I wanted to create a classification model which could distinguish between tweets about natural disasters and those that are not. Furthermore, as I am starting out in my data science career, I wanted to try out my recently acquired skills in natural language processing. Classification models for NLP is becoming more and more important as we've seen in social media sites implementing fact checkers during recent elections around the world and the COVID-19 pandemic to help the general public distinguish between real and conspirary information.Maybe we could use the model to develop an app or even a chatbox where users can feed in their tweet of choice and the model can help determine if this is about a disaster or not. But, for now, we are going to limit the scope of this project to developing the classifcation models using machine learning and deep learning. 
+Currently, my family lives in four countries across three continents. Whevever a notification about disasters or accidents props up, I know I'm not alone in checking for detailed information to see if my loved ones are safe. So, for my capstone project I wanted to create a classification model which could distinguish between tweets about disasters and those that are not. Furthermore, as I am starting out in my data science journey, I wanted to try out my recently acquired skills in natural language processing. Classification models for NLP is becoming more and more important as we've seen many social media sites implementing fact checkers during recent elections around the world and during the COVID-19 pandemic to help the general public distinguish between real and conspirary information. Maybe we could use the model to develop an app or even a chatbox where users can feed in their tweet of choice and the model can help determine if this is about a disaster or not. But, for now, I  am going to limit the scope of this project to developing the classifcation models using machine learning and deep learning. 
 
 ### Kaggle Disaster Tweets
 For this project, a dataset of 7631 tweets in English from Kaggle was used with the goal of classifying the tweets into two groups: Tweets regarding disasters and those that are not related to disasters. Definetely check out the dataset here: https://www.kaggle.com/competitions/nlp-getting-started/data.
@@ -18,7 +18,7 @@ The dataset included 5 columns: id, keyword, location, tweets, and label (target
  
 ![Alt text](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/Distibution_of_data.png)
 
-The id numbers were not ordered so I decided to dropped this column. Then, I focused on the keywords and the locations of the tweets to see if these could yield any divisive information on the two classes. As less than 1% of the keywords were missing, I was hoping this could provide some early insight into the two classes. I was also hoping the large chunk of entries missing for location could provide an insight as well: perhaps one class uses location tags more frequently than others? Or perhaps those with missing keywords had locations present?
+The id numbers were not ordered so I decided to dropped this column. Then, I focused on the keywords and the locations of the tweets to see if these could yield any divisive information on the two classes. As less than 1% of the keywords were missing, I was hoping this could provide some early insight into the two classes. I was also hoping the large chunk of entries missing for location could provide an insight as well.
 
 ### Keywords
 Of the 7631 entries in the dataset, only 7552 of them had keywords of which only 221 of them were unique. I wanted to explore these 221 keywords, and see if they could help distinguish between the two classes. 
@@ -32,40 +32,107 @@ I, then, wanted to look at a countplot of the words. This was a little tricky. M
 What I found was a little disappointing but not surpising. Only a couple of words were exclusively used in one class over the other. Such as derailment, debris, and wreckage only seemed to appear in disaster tweets whilst aftershok only appeared in non-disaster tweets. 4 words is not really enough to form a model which is disappointing but not the end of the world. A little further digging did show us some interesting features of our countplot: derailment and derailed for example appears more than once. A couple of words such as 'evacuate' and 'evacuated' and 'suicide bombing' and 'suicide bomber' appeared as independent words and phrases. This suggested I need to consider stemming or lemmatization of the keywords before we any further analysis. 
 
 #### Picking between Stemming and Lemmatization
-> Stemming is when the last couple of letters are removed from a word in the hopes of getting to the root word. For example for 'derailed' and 'derailment' can both be reduced to 'derail'.
-> Lemmatization is when we break down the word into essentially the form we can find in a dictionary. This is more complex than stemming as lemmatization takes into account the contextual use of the words too. 
+What is stemming and lemmatization? I have a feeling most people in the 21st centry have seen the benefits of these two types of algorithms even if they aren't directly aware of it: for example, when you search for something on Google, whether you misspell something or when you see lots of different results becuase of the similar names come up. 
 
-To understanding the difference between the two processes check our this like: https://www.sinequa.com/guide/natural-language-processing-guide/
+1. Stemming is when the last couple of letters, the suffixes, are removed from a word in the hopes of getting to the root word. For example for 'derailed' and 'derailment' can both be reduced to 'derail'. 
 
-Initially I was reluctant to stem the keywords as too much cleaning can sometimes run the risk of losing the sentiments of the texts. However, when I had a look through the keywords (have a look at the chart below) I realised the risks of that was quite low with this dataset. So, I used PorterStemmer to further clean up the keywords.
+2. Lemmatization is when we break down the word into essentially the form we can find in a dictionary. This is more complex than stemming as lemmatization takes into account the contextual use of the words too. 
 
+To understanding the difference between the two processes check our this link: https://www.sinequa.com/guide/natural-language-processing-guide/
 
+Initially I was reluctant to stem the keywords as too much cleaning can sometimes run the risk of losing the sentiments of the texts. However, when I had a look through the keywords (have a look at the chart below) I realised the risks of that was quite low with this dataset. I went with stemming over lammetization because keywords are not really sentences, so the words/phrases didn't really have contextual meaning. So, I used PorterStemmer to further clean up the keywords. 
 
 If we take a look at the chart above with the one below, we can see that words like evacuated has been reduced to their stems 'evacu'.
 ![Distribution of Keywords After Stemming](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/keywords_distributions.png)
 
-It is worth noting that even after the cleaning and stemming, we aren't close to having the perfectly clean dataset. For exmaple, wild fir and wildfir are both referring to wildfires, and bleed and blood could benefit from combining as well. 
+It is worth noting that even after the cleaning and stemming, we aren't close to having the perfectly clean dataset. For exmaple, 'wild fir' and 'wildfir' are both referring to wildfires, and bleed and blood could benefit from combining as well. The chart is also useful in highlighting one of the most common limitations of stemming: we see words that are reduced to 'roots' that aren't actually words nor roots in the English language. 
 
-The two word clouds illustrate the most common keywords in the two different classes. 
+I then created wordclouds to see the most most common keywords in the two different classes. This was also a helpful visualisation method which helped identify what characters were appearing in the keywords that I wanted to include in my regular expressions during the cleaning process. 
 
+#### Disaster Keywords
 ![Disaster Keywords](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/wordcloud_disaster_keywords.png)
+
+#### Non Disaster Keywords
+![Non Disaster Keywords](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/wordcloud_non_disasterwords.png)
 
 There were some commonalities in the choice of keywords but we also see there are keywords that appear more frequently in one class compared to others: body bags for example appears a lot more frequently as a keyword for non disaster tweets than in disaster tweets. There are a couple of words, debris and wreckage, which only appear as keywords for disaster tweets whilst aftershock, for example, only appears as a keyword in non disaster tweets. As the sample of keywords that cna be used to exclusively distinguish one class from another, we can conclude that there aren't sufficient differences in the keywords to try and develop a classification model. As a result we will drop this for future analysis.
 
 ### Location
-Initially I thought of looking at the missing data: maybe one class was missing location data more than the other. However, roughly 33% of the location data was missing from the dataset: 32.9% of tweets in the disaster class are missing and 33.6% of the tweets in the non-disaster classes are missing. This highlights that by looking for what data is missing won’t be very helpful as the distribution of missing data is equal amongst the two groups. So, I thought about looking at the similarity of the words: is there a similarity between locations of tweets about disasters and non disasters. This is why I tried out a cosine similarity using Scikit-learn. I got a score of 0.239, highlighting the words in the two classes were not very similar. This is definately worth exploring further but at this point I didn't really know how to further look into this. So, exploring the low similarity score is something I am going to come back to in another project. 
+Initially I had thought of looking at the missing data: maybe one class was missing location data more than the other. However, roughly 33% of the location data was missing from the dataset: 32.9% of tweets in the disaster class are missing and 33.6% of the tweets in the non-disaster classes are missing. This highlights that by looking for what data is missing won’t be very helpful either as the distribution of missing data is equal amongst the two groups. There are 3341 unique location tags in the dataset, which included dates and not always a city or a country. For example 'Est. September 12' and "AFRICA'. Punctuation such a as quotation marks, hashtags frequently appeared when I had a quick look through the data. Furthermore, some entries were more detailed than others. Some included the city and the country whilst some just the city or the country: Vancouver, Canada and Lincoln. This led me to think perhaps the location tags is going to be less useful that I'd like: there are lots of places called Lincoln in many different countries in the world. I also realised that I was going to have to clean up the location tags through a similar method to the keywords. So, again using regular expressions, I removed punctuations, accents, numerical characters, and finally stripped the locations of extra white spaces using the .strip() method. This reduced the unique entries from 3341 to 3106. 
+
+I thought about looking at the similarity of the words: is there a similarity between locations of tweets about disasters and non disasters.I used spaCy's small English library to the identify the locations and worked out the common locations between the two classes. Out of the 3106 unqique locations and 5080 total entries, there were only 82 locations that commonly appeared between the two classes. This is why I tried out a cosine similarity using Scikit-Learn. I got a score of 0.239, highlighting the words in the two classes were not very similar. This is definately worth exploring further but at this point I didn't really know how to further look into this. So, exploring the low similarity score is something I am going to come back to in another project. 
 
 ### Tweets
 
-Finally, it was time to look at the tweets!. Just like with the keywords, I wanted to be a little weary of cleaning up with tweets. This is why before any  cleaning of the the tweets I extracted the number of hashtags, mentions, emojis, and emoticons because we would lose this information when we strip the tweets of punctuation and special characters.
+Finally, it was time to look at the tweets! Just like with the keywords, I wanted to be a little weary of cleaning up the tweets. This is why before any cleaning of the the tweets I extracted the number of hashtags, mentions, emojis, and emoticons because we would lose this information when we strip the tweets of punctuation and special characters.
 
-For the number of hashtags, mentions, emojis and emoticons, all of the data are left skewed and the majority of the tweets only use one. The distributions were essentially identical for both classes so these features were considered to be not crucial in the classification of the two classes. 
+#### Hashtags
+ 
+Majority of the tweets used 1-2 hashtags across the two classes, but disaster tweets have a higher mean with a slightly higher standard deviation. Inspection of the hastags used also highlighted some with greater than 11 hastags: a third of which were related to non disasters and two thirds to disasters. This supports the summary statistics that the disaster tweets to have a slightly higher use of hashtags. 
 
-As the language used in tweets can vary greatly in formality, in order to clean the text first contractions had to be expanded. This was done in two ways: first contractions commonly using in colloquial English was expanded upon, and then the library contractions were used for further expansions. Then, the emoji library was used to remove emoticons and emojis from the texts. Finally, numerical values, html texts, urls, hashtags, mentions, accents were removed and all of the tweets were converted to lowercase. Then numerical features such as the number of words, number of characters, average length of words were all extracted. The two figures below show the distribution of the number of words and average length of the words between the two classes. The vertical lines illustrate the mean scores, and so we can conclude that their distributions are so similar they aren’t very useful for the classification. 
+![Hashtags](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/Num_hashtags.png)
 
-Once we had explored the features, we then focused on identifying and removing stopwords. As a dataset of 7000 is not really very large it was decided to not use standard stopwords as this might drastically reduce the size of our corpus. As a result the words that scored the lowest when the Count Vectorizer and TfidfVectorizer were applied were all oimitted: a total of 629 words. 
+Both the classes show a right skewed distribution. As a result, I concluded removing the hastags wouldn't result in losses of valuable information for our sentimental analysis later on. 
 
-Once the corpus was cleaned, we looked at the use of nouns and proper nouns for the two different groups. Both classes had a very similar distribution for both proper nouns and nouns (illustrated in the figure to the right) in general. 
+#### Mentions
+
+This showed a very similar right skewed distribution as the hashtag use wiith the modal use for both classes being 0 mentions. So, I decided to remove '@' before further analysing the tweets. 
+
+![Mentions](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/Num_mentions.png)
+
+#### Emojis and Emoticons
+
+I used the emjoi2.0.0 library to 'demojize' the tweets. Honestly, I found this a little challenging and here's a link I found to be pretty helpful: https://medium.com/analytics-vidhya/some-handy-functions-for-text-cleaning-and-manipulation-42bece1f390b
+
+The range of emojis and emoticons use in both the classes were 0-1, with the modal use being 0. Both of them showed the same 
+![Emojis](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/num_emojis.png)
+
+Again, the use of emmojis had a right skewed distribution for both the tweets, so I dropped these as well during the cleaning process. 
+
+#### Cleaning tweets
+
+Now comes the most interesting part of the cleaning process. I'd read up on quite a few articles and papers before I dived into cleaning the tweets. Here are a few concerns I had: 
+
+1. I know we want to remove punctuation, but people use punctuation to express feelings. For example !!! vs no exclamation marks at all can convey enthusiasm, fears, and many other sentiments. 
+
+
+2. Colloquialisms and contractions are are commonly used in Twitter given the 280 characters you're allowed, and they are also a large part of the language used in social media. The character limit and how it affected the use of language is tweets was cited as one of the many reasons for Twitter doubling the character limit from 140 to 240 in 2017. So, how I deal with colloqualisms and contractions was going to be important. Firstly, I realised pretty early there is no 'perfect' way of doing this. A lot of digging through the internet gave me the idea of coming up with an dictionary of common contractions, but this also was going to be time consuming. Then, I hit jackpot! I came across a github repo that already had a pretty extensive list of common contractions- check this out: https://github.com/rishabhverma17/sms_slang_translator/blob/master/slang.txt
+
+I also came across the library called contractions which also was pretty helpful in expanding the other contractions in the tweets further. One word of advice, always expand the contractions before remove anything from the text. This is because if you remove punctuation or lowercase the text first, certain contractions aren't picked up on. So, after all of the words were expanded, the numerical values, html texts, urls, hashtags, mentions, accents were removed and all of the tweets were converted to lowercase. Then, numerical features such as the number of words, number of characters, average length of words were all extracted. 
+
+#### Features from the tweets
+
+The distribution of number of characters and the number of words seems to be bimodal for disaster tweets. This is not surprising as the number of words and the number of characters have a strong correlation between them. The average lenght of the words seem to be shorter for disaster tweets that those not about disasters, and we don't see the same bimodal trend.
+
+For both classes the number of characters in the tweets have a left skewed distribution unlike for the number of words which is somewhat symmetrical. The vertical lines in the graphs below illustrate the mean of the different classes for two classes for the number of characters, number of words, and the mean length of the words. 
+
+![Number of characters](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/Num_characters.png)
+
+![Number of words](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/Num_words.png)
+
+![Length of words](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/mean_word_length.png)
+
+
+I concluded that the distributions are so similar for the two classes that these features aren’t very useful for the classification models I want to build. 
+
+#### Stopwords
+My next focus was on identifying and removing stopwords. As a dataset of 7000 is not really very large, I decided to not use standard stopwords as this might drastically reduce the size of the corpus. So I ceated my own list of stopwords. 
+
+Stopwords are words that are commonly used in language that are necessary for sentence/phrase construction but not necessarily important for describing the content. So let's say we have an article that describes the types of stars that exist in the universe. Here, the word 'star' is most likely to be frequently used but won't really be useful in differentiatng between the different types of starts discussed. So, here 'star' would be a stop word. For tweets this could include articles and pronouns. 
+
+To come up with my list, I used the CountVectorizer library from Scikit-Learn. This is where the words in the text are vectorised depending on how many times they are used in the text. There were a couple of interesting things that this showed me. 
+
+1. Firstly, I realised how my cleaning process wasn't quite perfect even after I'd spend ages trying to identify patterns. There were plenty of woords like 'aaaaaand' and 'aace'. So I added these to the list of words I'd like to omit. 
+
+2. Lot's of giberish words were still in the corpus such as 'abolxmhvy'. 
+
+For the sake of my curiosity, I also tried out the TF-IDF vectoriser as a couple of the DataCamp courses I'd takes had their instructors mention how this was the vectorizer for their choice. It's a similar method but instead of forming a list based on frequency, TF-IDF stands for term frequency - inverse document frequency. It essentially measures how mnay times a word appears in a document and the inverse document freqeuncy of the word across the corupus. The higher the score the more relevant the word is to the corpus. As expected, I found pretty similar words were listed as those with low scores as the count vectorizer method. However, there were a few differences. So, I decided to create an updated list of stopwords combining 100 words from the CountVectorizer list and the TF-IDF list and removed them from the corpus. 
+
+Once the corpus was cleaned, we looked at the use of nouns and proper nouns for the two different groups. Both classes had a very similar distribution for both proper nouns and nouns in general. 
+
+![Number of proper nouns](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/Num_proper_nouns.png)
+
+![nouns](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/Num_nouns.png)
 
 The numerical features showed very little correlation and as a result these were decided to be omitted. Instead, the tweets were then tokenized using TweetTokenizer  and then the WordNetLemmatizer was used to lemmatize the tweets so they could be processed further to develop Machine Learning and Deep Learning models. 
 
@@ -104,7 +171,3 @@ It would be interesting to further explore the types of words that people use wi
 Future works to consider to further the scope and findings of this project would be to optimize the deep neural network. Alternatives such as LSTM should also be tried to see if they are a better fit and can improve the accuracy. Furthermore, the effects of using Leaky ReLU for the activation function would be worth exploring further too. For a neural network of this size, I don’t think we’ll see significant improvements with Leaky ReLU but it is worth checking to be sure. 
 
 Whilst the scope of the project was to develop a model that would classify tweets into disaster and non disaster tweets, it is worth exploring the advantage of implementing a chat box function. This could allow individuals to check when they come across a tweet in question to whether it’s a play on words or actually referring to a natural disaster. During this current Russian-Ukrainian conflict we’ve seen Twitter and Reddit emmerge as leading sources of current news, so a chatbox might actually be welcomed by Twitter users.
-
-
-# References 
-Data [https://www.kaggle.com/competitions/nlp-getting-started/data] 
