@@ -108,10 +108,7 @@ For both classes the number of characters in the tweets have a left skewed distr
 
 ![Number of characters](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/Num_characters.png)
 
-![Number of words](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/Num_words.png)
-
-![Length of words](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/mean_word_length.png)
-
+![Number of words](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/Num_words.png)  ![Length of words](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/mean_word_length.png)
 
 I concluded that the distributions are so similar for the two classes that these features aren’t very useful for the classification models I want to build. 
 
@@ -134,8 +131,28 @@ Once the corpus was cleaned, we looked at the use of nouns and proper nouns for 
 
 ![nouns](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/Num_nouns.png)
 
-The numerical features showed very little correlation and as a result these were decided to be omitted. Instead, the tweets were then tokenized using TweetTokenizer  and then the WordNetLemmatizer was used to lemmatize the tweets so they could be processed further to develop Machine Learning and Deep Learning models. 
+#### Correlation
 
+Now, the tweets had their numerical features extracted I wanted to see if there were any strong correlations between any of these features. If there were then of course one of them can be dropped before getting this information ready for our machine learning models. Below is a heatmap to visualise the correlation between these features. 
+
+![heatmap](https://github.com/iban121/Springboard/blob/main/Capstone%203/notebooks/figures/heatmap_correlation.png)
+
+Unfortunately, the numerical features showed very little correlation between each other.
+
+## Preprocessing Tweets
+
+### Tokenization and Lemmatization
+
+I find tokenization, or rather the problems and limitations with tokenizations in natural language processing to be fascinating. I did spend quite a bit of time going through DataCamp courses and reading blogs and articles on this before actually tokenizing my corpus. 
+
+#### What is interesting about tokenization?
+
+Well tokenization is when we break down sentences, and essentially the corpus, into smaller chunks, aka tokens. This allows us to change our natural language data set into numerical features needed for machine learning or deep learning models. Essentially, it 'helps' machines to understand words as part of the whole corpus better. Actually, there seems to be even greaer uses for tokenization in NFTs and cybersecurity but that's well outside the scope of this project. 
+
+So what and why are there liminations? Well, us humans can usually look at a word or symbols and figure out context pretty easily. For example, $100 and £100 we cna easily just differentiate as currencies. Machines find even this distinction harder to do. Now, if we remove the currency symbols, understanding the meaning of the 100 becomes even harder. As a concequence there are lots and lots of different ways we can tokenize a corpus. I went with the TweetTokenizer because I was working with tweets. So pretty much all of the hardwork was done for me! Definately feel free to chekc out the documentation here: https://www.nltk.org/_modules/nltk/tokenize/casual.html
+
+#### Lemmatization vs Stemming
+In this case, I went with lemmatization of the tweets rather than stemming as context would be important here. I ued the WordNetLemmatizer() from NLTK. I went by this mainly because of a DataCamp course which raved about this lemmatizer, but there are plenty more out there that could be used. 
 
 ## Model Development and Evaluation
 
