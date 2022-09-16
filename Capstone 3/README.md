@@ -165,8 +165,10 @@ First up was optimising our models. As I'd mentioned earlier we needed to decide
 #### Why Multinomial Naive Bayes?
 It's a really popular algorithm used in NLP that's used for text data analysis for datasets that have multiple classes. As my goal here was to set up the optimal conditions for my vectorisation, this easy implementation of the multinomial Naive Bayes classifier made it an obvious choice. I've read that a disadvantage to this classifier is that the accuracy of its predictions can be a little lower than other probability algorithms, but as I wanted to use this as a baseline I decided the advantages of it's simplicity outweighed the disadvantage. 
 
+#### GridSearchCV
+
 #### Vectorizer
-Previously, during the cleaning process I'd explored the TF-IDF Vectorizer and the CountVectorizer. So I went with the TF-IDF Vectorizer here. As tweets are quite short, and my reading, I went with the ngrams range as (1, 1), (1, 2) and (1, 3). The goal is to use GridSearch CV to determine the optimal ngrams range. 
+Previously, during the cleaning process I'd explored the TF-IDF Vectorizer and the CountVectorizer. So I went with the TF-IDF Vectorizer here. As tweets are quite short, and my reading, I went with the ngrams range as (1, 1), (1, 2) and (1, 3). The goal is to use GridSearch CV to determine the optimal ngrams range. The default setting of the TF-IDF vectorizer doesn't ignore any terms or any of the lemmas in the corpus. This is a parameter that's worth optimizing as there might be words that are appearing too frequently. So, again using GridSearchCV I set a range of max_df values to test: 0.01, 0.1, 0.25, 0.5. This means that I am going to compare the scores of algorithm as it ignores words that appear in more than 1%, 10%, 25%, and 50% of the document. 
 
 
 
