@@ -149,20 +149,34 @@ I find tokenization, or rather the problems and limitations with tokenizations i
 
 Well tokenization is when we break down sentences, and essentially the corpus, into smaller chunks, aka tokens. This allows us to change our natural language data set into numerical features needed for machine learning or deep learning models. Essentially, it 'helps' machines to understand words as part of the whole corpus better. Actually, there seems to be even greaer uses for tokenization in NFTs and cybersecurity but that's well outside the scope of this project. 
 
-So what and why are there liminations? Well, us humans can usually look at a word or symbols and figure out context pretty easily. For example, $100 and £100 we cna easily just differentiate as currencies. Machines find even this distinction harder to do. Now, if we remove the currency symbols, understanding the meaning of the 100 becomes even harder. As a concequence there are lots and lots of different ways we can tokenize a corpus. I went with the TweetTokenizer because I was working with tweets. So pretty much all of the hardwork was done for me! Definately feel free to chekc out the documentation here: https://www.nltk.org/_modules/nltk/tokenize/casual.html
+So what and why are there liminations? Well, us humans can usually look at a word or symbols and figure out context pretty easily. For example, $100 and £100 we cna easily just differentiate as currencies. Machines find even this distinction harder to do. Now, if we remove the currency symbols, understanding the meaning of the 100 becomes even harder. As a concequence there are lots and lots of different ways we can tokenize a corpus. I went with the TweetTokenizer because I was working with tweets. So pretty much all of the hardwork was done for me! Definately feel free to check out the documentation here: https://www.nltk.org/_modules/nltk/tokenize/casual.html
 
 #### Lemmatization vs Stemming
-In this case, I went with lemmatization of the tweets rather than stemming as context would be important here. I ued the WordNetLemmatizer() from NLTK. I went by this mainly because of a DataCamp course which raved about this lemmatizer, but there are plenty more out there that could be used. 
+In this case, I went with lemmatization of the tweets rather than stemming as context would be important here. I used the WordNetLemmatizer() from NLTK mainly because of a DataCamp course which raved about this lemmatizer, but there are plenty more out there that could be used here. 
 
 ## Model Development and Evaluation
 
 ### Machine Learning Models for the Binary Classificaiton of Tweets
 
+Now the fun part: creating the mahcine learning models. First I had to decide which ones I'd like to use, and then optimize each of the parameters of the models so for we can find the 'best' model for this classification problem. Then, of course, I needed to come up with a way of evaluating which model is the 'best'. In my previous project on the course, the classification of breast cancer tumours, it was best to pick a model that had higher flase positive rates than false negative rates. As in healthcare, medical professionals don't just use one test to make a diagnosis. In the case of NLP, the preferred evaluation metric was a little harder to decide on. 
+
+First up was optimising our models. As I'd mentioned earlier we needed to decide on how to break up our tweets into smaller blocks whilst keeping contextual meaning: is it better to look at each separate word, lemmas, or is it better to groupe them into pairs, or threes which is known as the ngrams range? I used a baseline model, the Multinomial Naive-Bayes Classifier, alongside GridSearchCV from Scikitt-Learn to come up with an answer to these questions.
+
+#### Why Multinomial Naive Bayes?
+It's a really popular algorithm used in NLP that's used for text data analysis for datasets that have multiple classes. As my goal here was to set up the optimal conditions for my vectorisation, this easy implementation of the multinomial Naive Bayes classifier made it an obvious choice. I've read that a disadvantage to this classifier is that the accuracy of its predictions can be a little lower than other probability algorithms, but as I wanted to use this as a baseline I decided the advantages of it's simplicity outweighed the disadvantage. 
+
+#### Vectorizer
+Previously, during the cleaning process I'd explored the TF-IDF Vectorizer and the CountVectorizer. So I went with the TF-IDF Vectorizer here. As tweets are quite short, and my reading, I went with the ngrams range as (1, 1), (1, 2) and (1, 3). The goal is to use GridSearch CV to determine the optimal ngrams range. 
+
+
+
+
+
 The tweets were split into 80:20 ratio for training and validation. For vectorization, the TF-IDF Vectorizer was used with parameters max_df = 0.25 and ngram_range(1,2) which was determined through GridSearchCV. 
 
 For the baseline model, a Naive Bayes Classifier was used, and then 5 different classification models were selected. For each of these GridSearch with 10 fold cross validation was done to determine the optimal parameters. Then, the best parameters were selected and the performance of the best of each classification model were recorded in the table below. 
 
-The table is arranged in descending orders of Accuracy, the area under the receiver operating characteristic curve (AUC_ROC), and the Matthew’s correlation coefficient (MCC) as this is a classification model. As a result, logistic regression was determined as the best machine learning classification model. 
+The table is arranged in descending orders of accuracy, the area under the receiver operating characteristic curve (AUC_ROC), and the Matthew’s correlation coefficient (MCC) as this is a classification model. As a result, logistic regression was determined as the best machine learning classification model. 
 
 The heatmap highlights the classification of the Logistic Model with the parameters as stated in the table, and the figure on the right is the ROC curve. 
 
