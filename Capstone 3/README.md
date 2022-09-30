@@ -173,13 +173,13 @@ Previously, during the cleaning process I'd explored the TF-IDF Vectorizer and t
 
 I used a 80:20 ratio to split up the data into training and testing sets, and picked 5 different algorithms to try out: Logistic Regression, K-Nearest Neighbors Classifer, Random Forest Classifier, Gradient Boosting Classifier, and XGBoost. For each of these GridSearch with 10 fold cross validation was done to determine the optimal parameters. Then, the best parameters were selected and the performance of the best of each classification model were recorded. There are quite a few different methods of evaluating models, and often the choice of evaluation metrics does depend on domain knowledge. For example, in medical classification models selecting models with higher false positive rates than false negative rates is often ideal. For this tweet classification problem the evaluation metrics I decided to prioritise is the accuracy, the area under the reciever operating curve, and the Matthew's correlation coefficient. The table below summarises the results, but definitely feel free to have a look at the notebook, Prerprossing and Training, if you want detais on the tuning of hyperparameters. In this table, the classifiers are arranged with decreasing values of accuracy, area under the curve (ROC_AUC), and the MCC. 
     
-                 | Classifier          |   F1  |  MCC  |  Accuracy | ROC_AUC |  Recall |
-                 | --------------------|:-----:| -----:|----------:|--------:|--------:|
-                 | Logistic Regression | 0.748 | 0.584 |   0.794   |  0.783  |  0.681  |
-                 | XGBoost             | 0.519 | 0.441 |   0.700   |  0.669  |  0.361  |
-                 | Gradient Boosting   | 0.511 | 0.436 |   0.697   |  0.665  |  0.352  |
-                 | K-Nearest Neighbors | 0.472 | 0.378 |   0.674   |  0.642  |  0.325  |
-                 | Random Forest       | 0.292 | 0.292 |   0.624   |  0.582  |  0.173  |
+| Classifier          |   F1  |  MCC  |  Accuracy | ROC_AUC |  Recall |
+| --------------------|:-----:| -----:|----------:|--------:|--------:|
+| Logistic Regression | 0.748 | 0.584 |   0.794   |  0.783  |  0.681  |
+| XGBoost             | 0.519 | 0.441 |   0.700   |  0.669  |  0.361  |
+| Gradient Boosting   | 0.511 | 0.436 |   0.697   |  0.665  |  0.352  |
+| K-Nearest Neighbors | 0.472 | 0.378 |   0.674   |  0.642  |  0.325  |
+| Random Forest       | 0.292 | 0.292 |   0.624   |  0.582  |  0.173  |
 
 We can see the Logistic Regression performed the best out of all the various different classfiers and this was deemed as the best classification model. Here a little more reading was required to figure out how good this model actually is. 79.4% accuracy doesn't seem great, but speaking to industry experts made me realise this actually wasn't too bad. Next, I wanted to compare this to a deep learning model for one main reason: I'd never made one and I wanted to take this opportunity to try to develop one. There are some limitations of course: the tweets dataset is big but not really the immense size we want 
 
