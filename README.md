@@ -1,4 +1,4 @@
-# Springboard - Why do a bootcamp?
+# Springboard - Why enroll in a bootcamp?
 
 I managed to find myself stuck in India during the Covid-19 lockdown. After a solid couple of weeks of catching up on my reading list, I starting trying out various different online courses in a while myriad of topics: from digital marketing, a topic I knew nothing about, to brushing up on my programming skills, something I'd mostly ignored since my undergraduate days. This was the beginning of my journey to Data Science. 
 
