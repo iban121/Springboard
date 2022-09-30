@@ -102,7 +102,7 @@ I also came across the library called contractions which also was pretty helpful
 
 #### Features from the tweets
 
-The distribution of number of characters and the number of words seems to be bimodal for disaster tweets. This is not surprising as the number of words and the number of characters have a strong correlation between them. The average lenght of the words seem to be shorter for disaster tweets that those not about disasters, and we don't see the same bimodal trend.
+The distribution of number of characters and the number of words seems to be bimodal for disaster tweets. This is not surprising as the number of words and the number of characters have a strong correlation between them. The average length of the words seem to be shorter for disaster tweets that those not about disasters, and we don't see the same bimodal trend.
 
 For both classes the number of characters in the tweets have a left skewed distribution unlike for the number of words which is somewhat symmetrical. The vertical lines in the graphs below illustrate the mean of the different classes for two classes for the number of characters, number of words, and the mean length of the words. 
 
@@ -160,36 +160,34 @@ In this case, I went with lemmatization of the tweets rather than stemming as co
 
 Now the fun part: creating the mahcine learning models. First I had to decide which ones I'd like to use, and then optimize each of the parameters of the models so for we can find the 'best' model for this classification problem. Then, of course, I needed to come up with a way of evaluating which model is the 'best'. In my previous project on the course, the classification of breast cancer tumours, it was best to pick a model that had higher flase positive rates than false negative rates. As in healthcare, medical professionals don't just use one test to make a diagnosis. In the case of NLP, the preferred evaluation metric was a little harder to decide on. 
 
-First up was optimising our models. As I'd mentioned earlier we needed to decide on how to break up our tweets into smaller blocks whilst keeping contextual meaning: is it better to look at each separate word, lemmas, or is it better to groupe them into pairs, or threes which is known as the ngrams range? I used a baseline model, the Multinomial Naive-Bayes Classifier, alongside GridSearchCV from Scikitt-Learn to come up with an answer to these questions.
+First up was optimising our models. As I'd mentioned earlier we needed to decide on how to break up our tweets into smaller blocks whilst keeping contextual meaning: is it better to look at each separate word, lemmas, or is it better to group them into pairs, or threes which is known as the ngrams range? I used a baseline model, the Multinomial Naive-Bayes Classifier, alongside GridSearchCV from Scikitt-Learn to come up with an answer to these questions.
 
 #### Why Multinomial Naive Bayes?
 It's a really popular algorithm used in NLP that's used for text data analysis for datasets that have multiple classes. As my goal here was to set up the optimal conditions for my vectorisation, this easy implementation of the multinomial Naive Bayes classifier made it an obvious choice. I've read that a disadvantage to this classifier is that the accuracy of its predictions can be a little lower than other probability algorithms, but as I wanted to use this as a baseline I decided the advantages of it's simplicity outweighed the disadvantage. 
 
 #### GridSearchCV
 
-#### Vectorizer
-Previously, during the cleaning process I'd explored the TF-IDF Vectorizer and the CountVectorizer. So I went with the TF-IDF Vectorizer here. As tweets are quite short, and my reading, I went with the ngrams range as (1, 1), (1, 2) and (1, 3). The goal is to use GridSearch CV to determine the optimal ngrams range. The default setting of the TF-IDF vectorizer doesn't ignore any terms or any of the lemmas in the corpus. This is a parameter that's worth optimizing as there might be words that are appearing too frequently. So, again using GridSearchCV I set a range of max_df values to test: 0.01, 0.1, 0.25, 0.5. This means that I am going to compare the scores of algorithm as it ignores words that appear in more than 1%, 10%, 25%, and 50% of the document. 
+Previously, during the cleaning process I'd explored the TF-IDF Vectorizer and the CountVectorizer. So I went with the TF-IDF Vectorizer here. As tweets are quite short and from what I my reading, I went with the ngrams range as (1, 1), (1, 2) and (1, 3). The goal is to use GridSearch CV to determine the optimal ngrams range. The default setting of the TF-IDF vectorizer doesn't ignore any terms or any of the lemmas in the corpus. This is a parameter that's worth optimizing as there might be words that are appearing too frequently. So, again using GridSearchCV I set a range of max_df values to test: 0.01, 0.1, 0.25, 0.5. This means that I am going to compare the scores of algorithms where they ignores words that appear in more than 1%, 10%, 25%, and 50% of the document. Now, I had to decide on the 'CV': the number of folds for cross validation. Cross Validation is when the sample will be randomly divided into a certain number of groups, k groups/folds, of roughly the same size. The first group is treated as the validation set, and the model is tested on the remaining groups. Here I set decided to go with 2 folds. So this means for each ngram range, the training data was split into 2 groups. For each group evaluation scores are calculated and stored, but the models are discarded. Finally, we need algorithms for the classification. The results of the GridSearchCV helped determine the optimal hyperparameters as ngrams_range = (1,2) with the max_df = 0.25. 
 
+#### Machine Learning Classification Models
 
+I used a 80:20 ratio to split up the data into training and testing sets, and picked 5 different algorithms to try out: Logistic Regression, K-Nearest Neighbors Classifer, Random Forest Classifier, Gradient Boosting Classifier, and XGBoost. For each of these GridSearch with 10 fold cross validation was done to determine the optimal parameters. Then, the best parameters were selected and the performance of the best of each classification model were recorded. There are quite a few different methods of evaluating models, and often the choice of evaluation metrics does depend on domain knowledge. For example, in medical classification models selecting models with higher false positive rates than false negative rates is often ideal. For this tweet classification problem the evaluation metrics I decided to prioritise is the accuracy, the area under the reciever operating curve, and the Matthew's correlation coefficient. The table below summarises the results, but definitely feel free to have a look at the notebook, Prerprossing and Training, if you want detais on the tuning of hyperparameters. In this table, the classifiers are arranged with decreasing values of accuracy, area under the curve (ROC_AUC), and the MCC. 
+    
+                 | Classifier          |   F1  |  MCC  |  Accuracy | ROC_AUC |  Recall |
+                 | --------------------|:-----:| -----:|----------:|--------:|--------:|
+                 | Logistic Regression | 0.748 | 0.584 |   0.794   |  0.783  |  0.681  |
+                 | XGBoost             | 0.519 | 0.441 |   0.700   |  0.669  |  0.361  |
+                 | Gradient Boosting   | 0.511 | 0.436 |   0.697   |  0.665  |  0.352  |
+                 | K-Nearest Neighbors | 0.472 | 0.378 |   0.674   |  0.642  |  0.325  |
+                 | Random Forest       | 0.292 | 0.292 |   0.624   |  0.582  |  0.173  |
 
-
-
-The tweets were split into 80:20 ratio for training and validation. For vectorization, the TF-IDF Vectorizer was used with parameters max_df = 0.25 and ngram_range(1,2) which was determined through GridSearchCV. 
-
-For the baseline model, a Naive Bayes Classifier was used, and then 5 different classification models were selected. For each of these GridSearch with 10 fold cross validation was done to determine the optimal parameters. Then, the best parameters were selected and the performance of the best of each classification model were recorded in the table below. 
-
-The table is arranged in descending orders of accuracy, the area under the receiver operating characteristic curve (AUC_ROC), and the Matthew’s correlation coefficient (MCC) as this is a classification model. As a result, logistic regression was determined as the best machine learning classification model. 
-
-The heatmap highlights the classification of the Logistic Model with the parameters as stated in the table, and the figure on the right is the ROC curve. 
-
-Whilst an accuracy of 79% isn’t necessarily bad, and is definitely an improvement to the logistic model prior to hyperparameter tuning, if another model would be more suitable was explored. So, a Deep Learning model using word embedding was developed. 
-
+We can see the Logistic Regression performed the best out of all the various different classfiers and this was deemed as the best classification model. Here a little more reading was required to figure out how good this model actually is. 79.4% accuracy doesn't seem great, but speaking to industry experts made me realise this actually wasn't too bad. Next, I wanted to compare this to a deep learning model for one main reason: I'd never made one and I wanted to take this opportunity to try to develop one. There are some limitations of course: the tweets dataset is big but not really the immense size we want 
 
 ### Deep Learning Model with Word Embedding 
 
-Google’s Word2Vec was used to create a deep learning model. This was selected to see if we could keep the semantic closeness of the words in the tweets- think about this as the order at which the words appear in the tweets. The size of the features were trialed with 100, 200, and 300, with 200 giving us the highest accuracy of 61% . 
+Google’s Word2Vec was used to create a deep learning model. This was selected to see if we could keep the semantic closeness of the words in the tweets- think about this as the order at which the words appear in the tweets. The size of the features were trialed with 100, 200, and 300, with 200 giving us the highest accuracy of 61%. 
 
-For the neural networks there were three layers, the first one with 512 neurons, and two subsequent ones with 256 neurons each. A final layer was added, the output layer, with 1 neuron. Whilst, theoretically there are many different activation functions that can be used, for the first three layers Rectified Linear Unit function was used. ReLU function is one of the most popular activation functions and was selected because it is so much more computationally efficient compared to the rest. For the final layer the sigmoid function was used for activation as this is a binary classification and we are looking for outputs of whether a tweet is a disaster or not.
+For the neural networks I used three layers, the first one with 512 neurons, and two subsequent ones with 256 neurons each. A final layer was added, the output layer, with 1 neuron. Whilst, theoretically there are many different activation functions that can be used, for the first three layers Rectified Linear Unit function was used. ReLU function is one of the most popular activation functions and was selected because it is so much more computationally efficient compared to the rest. For the final layer the sigmoid function was used for activation as this is a binary classification and we are looking for outputs of whether a tweet is a disaster or not.
 
 A dropout value of 0.2 was used for each layer- as the accuracy of the models hovered between 57-60% there wasn’t a real concern with overfitting of the data. It’s worth mentioning that the data set is relatively small as a result the effects of the dropout is not as evident compared to larger and longer networks. The Adam optimizer was used, again for it’s faster computation time and to reduce parameter tuning. As this is a binary classification model, the loss function of choice was binary cross entropy. 
 
