@@ -18,9 +18,14 @@ In this case Big Mountain recently had an increased operational cost of 1.54 mil
 
 6. Key Data Sources Required? This gives us an idea of what data we have access to, whether they can add more value to the data provided or if they can provide other types of domain knowledge for the project. 
 
-**Synthesized Problem Statement: Implement a data driven business strategy which highlights the current facilities at Big Mountain Resort to increase ticket prices resulting in an increase of profits by at least 1.54 Million USD per season in the coming 12 month**
+**Synthesized Problem Statement: Implement a data driven business strategy which highlights the current facilities at Big Mountain Resort to increase ticket prices resulting in an increase of profits by at least 1.54 Million USD per season in the coming 12 months.**
 
 ## Step 2: Data Wrangling
+The goa
+
+1. Getting the Data
+2. Shape and Type of Data 
+3. Quality of the Data
 
 ## Step 3: Exploratory Data Analysis
 
