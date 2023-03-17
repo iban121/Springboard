@@ -1,4 +1,26 @@
-# Springboard - Why enroll in a bootcamp?
+# Springboard 
+## Curriculum
+
+### Python Data Stack
+
+
+### Applying the Data Science Method
+
+### Mastering the Data Science Method
+
+### Supervised Learning
+
+### Unsupervised Learning
+
+### Machine Learning Applications
+
+### Capstone 1 : Binary Classification of Breast Cancer Tumours
+The Wisconsin Breast Cancer dataset consisting of 
+
+### Captsone 2 : Natural Language Processing - Binary Classification of Tweets
+
+
+## Why enroll in a bootcamp?
 
 I managed to find myself stuck in India during the Covid-19 lockdown. After a solid couple of weeks of catching up on my reading list, I started trying out various different online courses in a myriad of topics: from digital marketing, a topic I knew nothing about, to brushing up on my programming skills, something I'd mostly ignored since my undergraduate days. This was the beginning of my journey to Data Science. 
 
