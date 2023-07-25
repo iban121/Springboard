@@ -1,1 +1,3 @@
 # Classification of Breast Cancer Tumours
+
+This was the first time I had the opportunity to try the Data Science Method I'd been learning about with Springboard. I do go into detail in [this article](https://medium.com/codex/a-binary-classification-problem-breast-cancer-tumours-b5260fbafba5) about the various different methods that exist and are used in the industry for data science projects which is worth checking out as there are quite a few out there. However, as this was my first, this was a pretty straightforward application of [DSM](https://towardsdatascience.com/the-data-science-method-dsm-35200eb4984). 
