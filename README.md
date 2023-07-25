@@ -14,10 +14,10 @@
 
 ### Machine Learning Applications
 
-### Capstone 1 : [Binary Classification of Breast Cancer Tumours(https://github.com/iban121/Springboard/tree/main/7%20Capstone%20Project%201%20-%20Binary%20Classification%20of%20Breast%20Cancer%20Tumours)
+### Capstone 1 : [Binary Classification of Breast Cancer Tumours](https://github.com/iban121/Springboard/tree/main/7%20Capstone%20Project%201%20-%20Binary%20Classification%20of%20Breast%20Cancer%20Tumours)
 
 
-### Capstone 2 : [Natural Language Processing - Binary Classification of Tweets] (https://github.com/iban121/Springboard/tree/main/8%20Capston%20Project%202%20-%20NLP%20-%20Binary%20Classification%20of%20Tweets)
+### Capstone 2 : [Natural Language Processing - Binary Classification of Tweets](https://github.com/iban121/Springboard/tree/main/8%20Capston%20Project%202%20-%20NLP%20-%20Binary%20Classification%20of%20Tweets)
 
 
 ## Why enroll in a bootcamp?
